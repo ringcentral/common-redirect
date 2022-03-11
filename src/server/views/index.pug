@@ -1,0 +1,62 @@
+
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='x-ua-compatible' content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='referrer', content='always')
+    title #{title}
+    link(href='//developer.ringcentral.com/assets/images/favicon.ico?v=20181214-0738', type='image/vnd.microsoft.icon', rel='shortcut icon')
+  body
+    #bg
+    #container.hide
+      #pbg
+      #all(style='text-align:center;padding:30px;font-size:24px')
+        | redirecting...
+    #content-loading(style='text-align:center;padding:30px;font-size:24px') loading...
+    script.
+      window.rc = !{JSON.stringify(_global)}
+    script.
+      !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="write key redacted";analytics.SNIPPET_VERSION="4.13.2";
+      analytics.load(window.rc.segmentKey);
+      analytics.page();
+      }}();
+    script.
+      function track (eventName, cb) {
+        const segmentOptions = {
+          integrations: {
+            All: true,
+            Mixpanel: true
+          }
+        }
+        window.analytics.track(eventName, {
+          appName: window.rc.appName,
+          appVersion: window.rc.version
+          // brand: ''
+          // 'App Language': string;
+          // 'Browser Language': string;
+          // 'Extension Type': string;
+        }, segmentOptions, cb)
+      }
+      window.rc.track = track
+    script.
+      window.addEventListener('load', function () {
+        document.body.removeChild(document.getElementById('content-loading'));
+        document.getElementById('container').classList.remove('hide')
+        const params = new Proxy(
+          new URLSearchParams(window.location.search),
+          {
+            get: (searchParams, prop) => searchParams.get(prop),
+          }
+        );
+        if (params.appName) {
+          window.rc.track(`app redirect:${params.appName}`, () => {
+            if (window.rc.isTest) {
+              console.log('redirect')
+            } else {
+              window.location.href = params.redirect
+            }
+          })
+        }
+      });
