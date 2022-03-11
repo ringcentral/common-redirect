@@ -4,7 +4,9 @@ A webapp to redirect any page, after track with segment.
 
 ## Use
 
-Just use `https://ringcentral.github.io/ringcentral-notification-app-developer-tool?redirect=https://your-redirect-url.com&appName=your-app-name` to visit `https://your-redirect-url.com`
+Just use `https://ringcentral.github.io/common-redirect?redirect=https://your-redirect-url.com&appName=your-app-name` to visit `https://your-redirect-url.com`
+
+Check event: `app redirect:your-app-name` from segment
 
 ## Dev
 
